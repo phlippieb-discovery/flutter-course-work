@@ -62,10 +62,7 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                       ),
                       onPressed: () {
-                        setState(() {
-                          scores.add(answers[currentIndex] == true);
-                          currentIndex++;
-                        });
+                        onAnswer(true);
                       },
                     ),
                   ),
@@ -83,10 +80,7 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                       ),
                       onPressed: () {
-                        setState(() {
-                          scores.add(answers[currentIndex] == false);
-                          currentIndex++;
-                        });
+                        onAnswer(false);
                       },
                     ),
                   ),
@@ -100,9 +94,12 @@ class _QuizPageState extends State<QuizPage> {
                 )
               ]
             : [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: getScoreIcons(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: getScoreIcons(),
+                  ),
                 ),
               ]);
   }
@@ -129,10 +126,11 @@ class _QuizPageState extends State<QuizPage> {
             color: score == true ? Colors.green : Colors.red,
           ))
       .toList();
-}
 
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
+  void onAnswer(bool answer) {
+    setState(() {
+      scores.add(answers[currentIndex] == answer);
+      currentIndex++;
+    });
+  }
+}

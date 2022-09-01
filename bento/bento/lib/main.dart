@@ -49,6 +49,16 @@ class Pages extends StatefulWidget {
     focusedTask = i;
   }
 
+  void reset() {
+    smallTask = "";
+    mediumTask = "";
+    largeTask = "";
+
+    smallTaskComplete = false;
+    mediumTaskComplete = false;
+    largeTaskComplete = false;
+  }
+
   @override
   State<Pages> createState() => _PagesState();
 }
@@ -68,9 +78,9 @@ class _PagesState extends State<Pages> {
       getHomePage(),
       getPackTasksPage(),
     ];
-    // if (isPacked()) {
-    results.add(getOverviewPage());
-    // }
+    if (isPacked()) {
+      results.add(getOverviewPage());
+    }
     if (widget.focusedTask > 0) {
       results.add(getFocusPage());
     }
@@ -164,95 +174,128 @@ Pack your Bento box with your next three tasks. Pick a small, medium, and large 
   }
 
   Widget getOverviewPage() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "Your tasks",
-          style: getStandardTextStyle(),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              color: Colors.black,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Row(
+    return (widget.smallTaskComplete &&
+            widget.mediumTaskComplete &&
+            widget.largeTaskComplete)
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "All done 🎉",
+                style: getStandardTextStyle(),
+              ),
+              TextButton(
+                  child: Text('Reset'),
+                  onPressed: () {
+                    setState(() {
+                      widget.reset();
+                    });
+                    animateTo(1);
+                  }),
+            ],
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Your tasks",
+                style: getStandardTextStyle(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    color: Colors.black,
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Small
                         Expanded(
                           flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8, top: 8, right: 4, bottom: 4),
-                            child: Container(
-                                color: Colors.white,
-                                child: TextButton(
-                                  child: Text('Small'),
-                                  onPressed: () {
-                                    setState(() {
-                                      widget.onTaskFocused(1);
-                                    });
-                                    animateToFocusPage();
-                                  },
-                                )),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // Small
+                              widget.smallTaskComplete
+                                  ? Container()
+                                  : Expanded(
+                                      flex: 2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8,
+                                            top: 8,
+                                            right: 4,
+                                            bottom: 4),
+                                        child: Container(
+                                            color: Colors.white,
+                                            child: TextButton(
+                                              child: Text('Small'),
+                                              onPressed: () {
+                                                setState(() {
+                                                  widget.onTaskFocused(1);
+                                                });
+                                                animateTo(4);
+                                              },
+                                            )),
+                                      ),
+                                    ),
+                              // Medium
+                              widget.mediumTaskComplete
+                                  ? Container()
+                                  : Expanded(
+                                      flex: 3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 4,
+                                            top: 8,
+                                            right: 8,
+                                            bottom: 4),
+                                        child: Container(
+                                            color: Colors.white,
+                                            child: TextButton(
+                                              child: Text('Medium'),
+                                              onPressed: () {
+                                                setState(() {
+                                                  widget.onTaskFocused(2);
+                                                });
+                                                animateTo(4);
+                                              },
+                                            )),
+                                      ),
+                                    ),
+                            ],
                           ),
                         ),
-                        // Medium
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 4, top: 8, right: 8, bottom: 4),
-                            child: Container(
-                                color: Colors.white,
-                                child: TextButton(
-                                  child: Text('Medium'),
-                                  onPressed: () {
-                                    setState(() {
-                                      widget.onTaskFocused(2);
-                                    });
-                                    animateToFocusPage();
-                                  },
-                                )),
-                          ),
-                        ),
+                        // Large
+                        widget.largeTaskComplete
+                            ? Container()
+                            : Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 8, top: 4, right: 8, bottom: 8),
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: TextButton(
+                                      child: Text("Large"),
+                                      onPressed: () {
+                                        setState(() {
+                                          widget.onTaskFocused(3);
+                                        });
+                                        animateTo(4);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
-                  // Large
-                  Expanded(
-                    flex: 3,
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 8),
-                      child: Container(
-                        color: Colors.white,
-                        child: TextButton(
-                          child: Text("Large"),
-                          onPressed: () {
-                            setState(() {
-                              widget.onTaskFocused(3);
-                            });
-                            animateToFocusPage();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        )
-      ],
-    );
+                ),
+              )
+            ],
+          );
   }
 
   Widget getFocusPage() {
@@ -268,6 +311,25 @@ Pack your Bento box with your next three tasks. Pick a small, medium, and large 
           getFocusedTask(),
           style: TextStyle(
             fontSize: 40,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 40),
+          child: TextButton(
+            child: Text("I'm done!"),
+            onPressed: () {
+              setState(() {
+                if (widget.focusedTask == 1) {
+                  widget.smallTaskComplete = true;
+                } else if (widget.focusedTask == 2) {
+                  widget.mediumTaskComplete = true;
+                } else if (widget.focusedTask == 3) {
+                  widget.largeTaskComplete = true;
+                }
+                widget.focusedTask = 0;
+              });
+              animateTo(3);
+            },
           ),
         ),
       ],
@@ -305,9 +367,9 @@ Pack your Bento box with your next three tasks. Pick a small, medium, and large 
       widget.mediumTask != '' &&
       widget.largeTask != '';
 
-  void animateToFocusPage() {
+  void animateTo(int page) {
     widget.pageController.animateToPage(
-      4,
+      page,
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );

@@ -7,6 +7,8 @@ import 'input_card.dart';
 enum Gender { male, female }
 
 int height = 170;
+int weight = 70;
+int age = 20;
 
 class InputPage extends StatefulWidget {
   @override
@@ -102,9 +104,77 @@ class _InputPageState extends State<InputPage> {
               children: [
                 InputCard(
                   cardColor: k.inputCardColor,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("WEIGHT"),
+                      Text(
+                        weight.toString(),
+                        style: k.bigTextStyle,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RoundIconButton(
+                            icon: FontAwesomeIcons.minus,
+                            onPressed: () {
+                              setState(() {
+                                weight = (weight > 0) ? weight - 1 : 0;
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          RoundIconButton(
+                            icon: FontAwesomeIcons.plus,
+                            onPressed: () {
+                              setState(() {
+                                weight++;
+                              });
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
                 InputCard(
                   cardColor: k.inputCardColor,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("AGE"),
+                      Text(
+                        age.toString(),
+                        style: k.bigTextStyle,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RoundIconButton(
+                            icon: FontAwesomeIcons.minus,
+                            onPressed: () {
+                              setState(() {
+                                age = (age > 0) ? age - 1 : 0;
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          RoundIconButton(
+                            icon: FontAwesomeIcons.plus,
+                            onPressed: () {
+                              setState(() {
+                                age++;
+                              });
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -122,4 +192,22 @@ class _InputPageState extends State<InputPage> {
   }
 
   Gender selectedGender = Gender.male;
+}
+
+class RoundIconButton extends StatelessWidget {
+  RoundIconButton({this.icon, this.onPressed});
+
+  final IconData icon;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      child: Icon(icon),
+      shape: CircleBorder(),
+      constraints: BoxConstraints.tightFor(width: 55, height: 55),
+      fillColor: Color(0xff4c4f5e),
+    );
+  }
 }

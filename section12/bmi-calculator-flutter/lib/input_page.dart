@@ -3,8 +3,8 @@ import 'constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'centered_vertical_icon_and_text.dart';
 import 'input_card.dart';
-
-enum Gender { male, female }
+import 'calc.dart';
+import 'gender.dart';
 
 int height = 170;
 int weight = 70;
@@ -180,11 +180,28 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           // Bottom container
-          Container(
-            color: k.bottomContainerColor,
-            margin: EdgeInsets.only(top: 10),
-            width: double.infinity,
-            height: k.bottomContainerHeight,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ResultsPage(
+                            height: height,
+                            weight: weight,
+                          )));
+            },
+            child: Container(
+              color: k.bottomContainerColor,
+              margin: EdgeInsets.only(top: 10),
+              width: double.infinity,
+              height: k.bottomContainerHeight,
+              child: Center(
+                child: Text(
+                  "CALCULATE",
+                  style: k.bigTextStyle,
+                ),
+              ),
+            ),
           )
         ],
       ),

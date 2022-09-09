@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'dart:convert' as convert;
+import 'package:clima/services/weather.dart' as weather;
 
 class LocationScreen extends StatefulWidget {
+  LocationScreen({this.locationWeather});
+
+  final locationWeather;
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
@@ -9,6 +15,13 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
+    // double tempAsDouble =
+    //     (convert.jsonDecode(widget.locationWeather)['main']['temp'] as double).toInt();
+    // int temp = tempAsDouble.toInt();
+    int condition =
+        convert.jsonDecode(widget.locationWeather)['weather'][0]['id'];
+    String city = convert.jsonDecode(widget.locationWeather)['name'];
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -49,11 +62,11 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '32°',
+                      '${_getTemperature()}°',
                       style: kTempTextStyle,
                     ),
                     Text(
-                      '☀️',
+                      _getIcon(),
                       style: kConditionTextStyle,
                     ),
                   ],
@@ -62,7 +75,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's 🍦 time in San Francisco!",
+                  _getMessage(),
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
@@ -73,4 +86,16 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
+
+  int _getTemperature() =>
+      (convert.jsonDecode(widget.locationWeather)['main']['temp'] as double)
+          .toInt();
+  String _getIcon() => weather.WeatherModel().getWeatherIcon(_getCondition());
+  String _getMessage() =>
+      weather.WeatherModel().getMessage(_getCondition()) +
+      ' in ' +
+      _getCityName();
+  int _getCondition() =>
+      convert.jsonDecode(widget.locationWeather)['weather'][0]['id'] as int;
+  String _getCityName() => convert.jsonDecode(widget.locationWeather)['name'];
 }

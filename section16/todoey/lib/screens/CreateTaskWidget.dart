@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
 
 class CreateTaskWidget extends StatefulWidget {
+  Function onCreateTask;
+
+  CreateTaskWidget({required this.onCreateTask});
+
   @override
   State<CreateTaskWidget> createState() => _CreateTaskWidgetState();
 }
 
 class _CreateTaskWidgetState extends State<CreateTaskWidget> {
+  String _currentText = '';
+
   @override
   Widget build(BuildContext context) => Container(
         color: const Color(0xff757575),
@@ -32,19 +38,22 @@ class _CreateTaskWidgetState extends State<CreateTaskWidget> {
               ),
               // Text field
               const SizedBox(height: 20),
-              const TextField(
+              TextField(
                 style: kSmallTextStyle,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   filled: true,
                   focusColor: kAccentColor,
                 ),
                 autofocus: true,
+                onChanged: (value) => _currentText = value,
+                onEditingComplete: _onCreate,
               ),
               // Button
               const SizedBox(height: 20),
               TextButton(
+                onPressed: _onCreate,
                 child: Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     // width: 300,
                     color: kAccentColor,
                     child: Center(
@@ -53,10 +62,14 @@ class _CreateTaskWidgetState extends State<CreateTaskWidget> {
                         style: kSmallTextStyle.copyWith(color: Colors.white),
                       ),
                     )),
-                onPressed: () {},
               ),
             ],
           ),
         ),
       );
+
+  void _onCreate() {
+    Navigator.pop(context);
+    widget.onCreateTask(_currentText);
+  }
 }

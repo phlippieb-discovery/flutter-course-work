@@ -2,27 +2,14 @@ import 'package:flutter/material.dart';
 import 'TaskTile.dart';
 import '../models/Task.dart';
 
-class TasksListView extends StatefulWidget {
-  @override
-  State<TasksListView> createState() => _TasksListViewState();
-}
+class TasksListWidget extends StatelessWidget {
+  final List<Task> tasks;
+  final Function onToggle;
 
-class _TasksListViewState extends State<TasksListView> {
-  List<Task> tasks = [
-    Task('Buy milk'),
-    Task('Buy eggs'),
-    Task('Buy milk'),
-    Task('Buy cream soda'),
-  ];
+  TasksListWidget(this.tasks, this.onToggle);
 
   @override
   Widget build(BuildContext context) => ListView.builder(
       itemCount: tasks.length,
-      itemBuilder: ((context, i) => TaskTile(tasks[i], (_) => _onToggle(i))));
-
-  void _onToggle(int index) {
-    setState(() {
-      tasks[index].toggle();
-    });
-  }
+      itemBuilder: ((context, i) => TaskTile(tasks[i], (_) => onToggle(i))));
 }

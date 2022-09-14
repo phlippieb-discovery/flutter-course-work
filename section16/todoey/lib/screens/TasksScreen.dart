@@ -3,9 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
 import 'package:todoey/components/TaskTile.dart';
 import 'package:todoey/components/TasksListView.dart';
+import 'package:todoey/models/Task.dart';
 import 'package:todoey/screens/CreateTaskWidget.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
+  @override
+  State<TasksScreen> createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
+  // MARK: State
+  List<Task> tasks = [
+    Task('Add your first task'),
+  ];
+
+  // MARK: UI
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: kAccentColor,
@@ -23,7 +35,9 @@ class TasksScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  child: CreateTaskWidget(),
+                  child: CreateTaskWidget(
+                    onCreateTask: _onAdd,
+                  ),
                 ),
               ),
             );
@@ -81,10 +95,18 @@ class TasksScreen extends StatelessWidget {
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                child: TasksListView(),
+                child: TasksListWidget(tasks, _onToggle),
               ),
             ),
           ],
         ),
       );
+
+  void _onAdd(String title) => setState(() {
+        tasks.add(Task(title));
+      });
+
+  void _onToggle(int index) => setState(() {
+        tasks[index].toggle();
+      });
 }

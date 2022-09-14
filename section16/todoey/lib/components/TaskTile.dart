@@ -14,18 +14,16 @@ class TaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer<AppState>(
       builder: (context, appState, child) => ListTile(
-            leading: GestureDetector(
-              onLongPress: onLongPress,
-              child: Text(
-                task.title,
-                style: _getTextStyle(isComplete: task.isComplete),
-              ),
+            leading: Text(
+              task.title,
+              style: _getTextStyle(isComplete: task.isComplete),
             ),
             trailing: Checkbox(
               value: task.isComplete,
               activeColor: kAccentColor,
               onChanged: (_) => onToggle(),
             ),
+            onLongPress: onLongPress,
           ));
 
   TextStyle _getTextStyle({required bool isComplete}) {

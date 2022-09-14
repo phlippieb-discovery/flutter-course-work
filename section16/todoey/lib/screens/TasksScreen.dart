@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todoey/components/ListItemWidget.dart';
+// import 'package:todoey/components/ListItemWidget.dart';
 import 'package:todoey/constants.dart';
+import 'package:todoey/components/TaskTile.dart';
+import 'package:todoey/components/TasksListView.dart';
+import 'package:todoey/screens/CreateTaskWidget.dart';
 
 class TasksScreen extends StatelessWidget {
   @override
@@ -8,17 +11,30 @@ class TasksScreen extends StatelessWidget {
         backgroundColor: kAccentColor,
         floatingActionButton: FloatingActionButton(
           backgroundColor: kAccentColor,
-          child: Icon(
+          child: const Icon(
             Icons.create,
           ),
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: CreateTaskWidget(),
+                ),
+              ),
+            );
+          },
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SafeArea(
               child: Container(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 30,
                   left: 30,
                   right: 30,
@@ -26,7 +42,7 @@ class TasksScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 50,
                       child: Icon(
@@ -35,10 +51,10 @@ class TasksScreen extends StatelessWidget {
                         color: kAccentColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       'Todoey',
                       style: TextStyle(
                         color: Colors.white,
@@ -56,22 +72,16 @@ class TasksScreen extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: kCardBorderRadius,
                     topRight: kCardBorderRadius,
                   ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ListItemWidget('Buy milk', isComplete: false),
-                    ListItemWidget('Buy eggs', isComplete: false),
-                    ListItemWidget('Buy bread', isComplete: true),
-                  ],
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: TasksListView(),
               ),
             ),
           ],

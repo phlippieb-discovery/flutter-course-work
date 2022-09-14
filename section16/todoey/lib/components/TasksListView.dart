@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'TaskTile.dart';
-import '../models/Task.dart';
+import '../models/AppState.dart';
+import 'package:provider/provider.dart';
 
 class TasksListWidget extends StatelessWidget {
-  final List<Task> tasks;
-  final Function onToggle;
-
-  TasksListWidget(this.tasks, this.onToggle);
-
   @override
   Widget build(BuildContext context) => ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: ((context, i) => TaskTile(tasks[i], (_) => onToggle(i))));
+      itemCount: Provider.of<AppState>(context).tasks.length,
+      itemBuilder: ((_, i) => TaskTile(i)));
 }

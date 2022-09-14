@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
+import 'package:todoey/models/AppState.dart';
+import 'package:provider/provider.dart';
 
 class CreateTaskWidget extends StatefulWidget {
-  Function onCreateTask;
-
-  CreateTaskWidget({required this.onCreateTask});
-
   @override
   State<CreateTaskWidget> createState() => _CreateTaskWidgetState();
 }
@@ -70,6 +68,6 @@ class _CreateTaskWidgetState extends State<CreateTaskWidget> {
 
   void _onCreate() {
     Navigator.pop(context);
-    widget.onCreateTask(_currentText);
+    Provider.of<AppState>(context, listen: false).addTask(_currentText);
   }
 }

@@ -5,7 +5,13 @@ import 'package:provider/provider.dart';
 
 class TasksListWidget extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => ListView.builder(
-      itemCount: Provider.of<AppState>(context).tasks.length,
-      itemBuilder: ((_, i) => TaskTile(i)));
+  Widget build(BuildContext context) => Consumer<AppState>(
+      builder: (context, appState, child) => ListView.builder(
+            itemCount: appState.tasks.length,
+            itemBuilder: (_, i) => TaskTile(
+              appState.tasks[i],
+              () => appState.toggleTask(i),
+              () => appState.deleteTask(i),
+            ),
+          ));
 }

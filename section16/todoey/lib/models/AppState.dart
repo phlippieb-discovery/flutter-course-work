@@ -12,6 +12,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteTask(int index) {
+    tasks.removeAt(index);
+    notifyListeners();
+  }
+
   void addTask(String title) {
     tasks.add(Task(title));
     notifyListeners();

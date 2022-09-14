@@ -5,26 +5,31 @@ import 'package:todoey/models/Task.dart';
 import 'package:todoey/models/AppState.dart';
 
 class TaskTile extends StatelessWidget {
-  final int taskIndex;
-  TaskTile(this.taskIndex);
+  final Task task;
+  final VoidCallback onToggle;
+  final VoidCallback onLongPress;
+
+  TaskTile(this.task, this.onToggle, this.onLongPress);
 
   @override
   Widget build(BuildContext context) => Consumer<AppState>(
       builder: (context, appState, child) => ListTile(
-            leading: Text(
-              appState.tasks[taskIndex].title,
-              style: _getTextStyle(appState.tasks[taskIndex]),
+            leading: GestureDetector(
+              onLongPress: onLongPress,
+              child: Text(
+                task.title,
+                style: _getTextStyle(isComplete: task.isComplete),
+              ),
             ),
             trailing: Checkbox(
-              value: appState.tasks[taskIndex].isComplete,
+              value: task.isComplete,
               activeColor: kAccentColor,
-              onChanged: (_) => Provider.of<AppState>(context, listen: false)
-                  .toggleTask(taskIndex),
+              onChanged: (_) => onToggle(),
             ),
           ));
 
-  TextStyle _getTextStyle(Task task) {
-    return (task.isComplete)
+  TextStyle _getTextStyle({required bool isComplete}) {
+    return (isComplete)
         ? kSmallTextStyle.copyWith(decoration: TextDecoration.lineThrough)
         : kSmallTextStyle;
   }
